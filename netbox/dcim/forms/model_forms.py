@@ -602,7 +602,7 @@ class ModuleForm(ModuleCommonForm, NetBoxModelForm):
         super().__init__(*args, **kwargs)
 
         if self.instance.pk:
-            self.fields['device'].disabled = True
+            self.fields['device'].disabled = False
             self.fields['replicate_components'].initial = False
             self.fields['replicate_components'].disabled = True
             self.fields['adopt_components'].initial = False
