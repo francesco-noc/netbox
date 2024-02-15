@@ -1220,6 +1220,15 @@ class Module(PrimaryModel, ConfigContextModel):
         if not is_new or (disable_replication and not adopt_components):
             return
 
+        # If the mudule is being edited, we delete all components and re-add them
+        # This is done to ensure that the components are in sync with the module type
+
+        # if not is_new:
+        #    for component in [
+        #        ConsolePort, ConsoleServerPort, Interface, PowerPort, PowerOutlet, RearPort, FrontPort
+        #    ]:
+        #        component.objects.filter(module=self).delete()
+
         # Iterate all component types
         for templates, component_attribute, component_model in [
             ("consoleporttemplates", "consoleports", ConsolePort),
