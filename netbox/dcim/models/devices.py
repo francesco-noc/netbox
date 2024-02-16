@@ -1214,20 +1214,21 @@ class Module(PrimaryModel, ConfigContextModel):
 
         adopt_components = getattr(self, '_adopt_components', False)
         disable_replication = getattr(self, '_disable_replication', False)
+        recreate_components = getattr(self, '_recreate_components', False)
 
-        # We skip adding components if the module is being edited or
-        # both replication and component adoption is disabled
-        if not is_new or (disable_replication and not adopt_components):
+        # If the module is being edited and we have to recreate components,
+        # we delete all components and set disable_replication to False
+
+        if not is_new and recreate_components:
+            for component in [
+                ConsolePort, ConsoleServerPort, Interface, PowerPort, PowerOutlet, RearPort, FrontPort
+            ]:
+                component.objects.filter(module=self).delete()
+            disable_replication = False
+
+        # We skip adding components if both replication and component adoption is disabled
+        if disable_replication and not adopt_components:
             return
-
-        # If the mudule is being edited, we delete all components and re-add them
-        # This is done to ensure that the components are in sync with the module type
-
-        # if not is_new:
-        #    for component in [
-        #        ConsolePort, ConsoleServerPort, Interface, PowerPort, PowerOutlet, RearPort, FrontPort
-        #    ]:
-        #        component.objects.filter(module=self).delete()
 
         # Iterate all component types
         for templates, component_attribute, component_model in [

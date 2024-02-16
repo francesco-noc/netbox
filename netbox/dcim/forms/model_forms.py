@@ -608,6 +608,14 @@ class ModuleForm(ModuleCommonForm, NetBoxModelForm):
             self.fields['adopt_components'].initial = False
             self.fields['adopt_components'].disabled = True
 
+    def clean(self):
+        super().clean()
+
+        # If ModuleBay or Device have been changed, set _recreate_components to True
+        if self.instance.pk:
+            if self.cleaned_data['module_bay'] != self.instance.module_bay or self.cleaned_data['device'] != self.instance.device:
+                self.instance._recreate_components = True
+
 
 class CableForm(TenancyForm, NetBoxModelForm):
     comments = CommentField()
