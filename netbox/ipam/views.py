@@ -372,7 +372,7 @@ class AggregatePrefixesView(generic.ObjectChildrenView):
             'show_available': bool(request.GET.get('show_available', 'true') == 'true'),
             'show_assigned': bool(request.GET.get('show_assigned', 'true') == 'true'),
         }
-    
+
 
 @register_model_view(Aggregate, 'edit')
 class AggregateEditView(generic.ObjectEditView):
@@ -406,9 +406,11 @@ class AggregateBulkDeleteView(generic.BulkDeleteView):
     filterset = filtersets.AggregateFilterSet
     table = tables.AggregateTable
 
+
 @register_model_view(Aggregate, 'contacts')
 class AggregateContactsView(ObjectContactsView):
     queryset = Aggregate.objects.all()
+
 
 #
 # Prefix/VLAN roles
@@ -647,9 +649,11 @@ class PrefixBulkDeleteView(generic.BulkDeleteView):
     filterset = filtersets.PrefixFilterSet
     table = tables.PrefixTable
 
+
 @register_model_view(Prefix, 'contacts')
 class PrefixContactsView(ObjectContactsView):
     queryset = Prefix.objects.all()
+
 
 #
 # IP Ranges
@@ -733,9 +737,11 @@ class IPRangeBulkDeleteView(generic.BulkDeleteView):
     filterset = filtersets.IPRangeFilterSet
     table = tables.IPRangeTable
 
+
 @register_model_view(IPRange, 'contacts')
 class IPRangeContactsView(ObjectContactsView):
     queryset = IPRange.objects.all()
+
 
 #
 # IP addresses
@@ -904,9 +910,11 @@ class IPAddressRelatedIPsView(generic.ObjectChildrenView):
     def get_children(self, request, parent):
         return parent.get_related_ips().restrict(request.user, 'view')
 
+
 @register_model_view(IPAddress, 'contacts')
 class IPAddressContactsView(ObjectContactsView):
     queryset = IPAddress.objects.all()
+
 
 #
 # VLAN groups
